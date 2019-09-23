@@ -1,3 +1,5 @@
+pkg/*
+# Github suggestions below
 # Binaries for programs and plugins
 *.exe
 *.exe~
