@@ -7,6 +7,8 @@ import (
 	"math/rand"
 	"net/http"
 	"time"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
 // Listener is a container for daemon vars
@@ -72,7 +74,17 @@ func New(port *int) Listener {
 	d.Mux.HandleFunc("/", viewHandler)
 	d.Mux.HandleFunc("/ping/", pingHandler)
 
-	d.Server = &http.Server{Addr: srvAddr, Handler: d.Mux}
+	m := &autocert.Manager{
+		Cache:      autocert.DirCache("secret-dir"),
+		HostPolicy: autocert.HostWhitelist("fivepin.coconutpilot.mooo.com"),
+		Prompt:     autocert.AcceptTOS,
+	}
+
+	d.Server = &http.Server{
+		Addr:      srvAddr,
+		Handler:   d.Mux,
+		TLSConfig: m.TLSConfig(),
+	}
 
 	return d
 }

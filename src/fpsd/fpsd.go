@@ -23,14 +23,14 @@ func main() {
 	log.SetFlags(log.Ldate | log.Lmicroseconds | log.Lshortfile)
 	log.Println("main()")
 
-	port := flag.Int("port", 8080, "listen port")
+	port := flag.Int("port", 443, "listen port")
 	flag.Parse()
 
 	l := listener.New(port)
 	l.Mux.HandleFunc("/foo/", fooHandler)
 
 	go func() {
-		err := l.Server.ListenAndServe()
+		err := l.Server.ListenAndServeTLS("", "")
 		if err != http.ErrServerClosed {
 			log.Printf("Failed: %v", err)
 		}
@@ -44,7 +44,7 @@ func main() {
 		log.Printf("Got signal: %v\n", signal)
 	}
 	l.Server.Shutdown(context.Background())
-	log.Println("Exiting")
+	log.Println("Exiting clean")
 }
 
 func fooHandler(w http.ResponseWriter, r *http.Request) {
