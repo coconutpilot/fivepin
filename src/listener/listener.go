@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 )
@@ -20,7 +21,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("cache-control", "private, max-age=0, no-store")
 	fmt.Fprintf(w, r.URL.String())
-	time.Sleep(time.Second * 10)
+	time.Sleep(time.Millisecond * time.Duration(rand.Int63n(2000)))
 }
 
 func pingHandler(w http.ResponseWriter, r *http.Request) {
