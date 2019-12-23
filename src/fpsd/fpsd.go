@@ -33,7 +33,7 @@ func main() {
 			log.Printf("Failed: %v", err)
 		}
 		log.Print("Shutting down")
-
+		close(signaler)
 	}()
 
 	// This is blocking:
