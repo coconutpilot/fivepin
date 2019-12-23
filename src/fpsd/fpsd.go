@@ -1,16 +1,15 @@
 package main
 
 import (
+	"clienthandler"
 	"context"
 	"flag"
-	"fmt"
 	"listener"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
@@ -27,8 +26,7 @@ func main() {
 	flag.Parse()
 
 	l := listener.New(port)
-	l.Mux.HandleFunc("/foo/", fooHandler)
-
+	clienthandler.AddHandlers(&l)
 	go func() {
 		err := l.Server.ListenAndServe()
 		if err != http.ErrServerClosed {
@@ -45,12 +43,4 @@ func main() {
 	}
 	l.Server.Shutdown(context.Background())
 	log.Println("Exiting")
-}
-
-func fooHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("fooHandler()")
-
-	w.Header().Set("cache-control", "private, max-age=0, no-store")
-	fmt.Fprintf(w, r.URL.String())
-	time.Sleep(time.Second * 10)
 }
