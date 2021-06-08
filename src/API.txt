@@ -1,0 +1,23 @@
+fpctl
+
+   status
+
+   vpn start
+
+   --ipSet tor
+
+   --ipSet malware
+
+
+   --geo CA
+   --geo EU
+
+
+   vmnat start
+
+   --dev virbr0
+
+
+   netns start
+   --dev br0
+
